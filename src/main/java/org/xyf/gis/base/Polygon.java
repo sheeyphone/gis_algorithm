@@ -1,6 +1,10 @@
 package org.xyf.gis.base;
 
+import org.xyf.gis.GeometryResolutionException;
 import org.xyf.gis.utils.RasterUtils;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Polygon {
 
@@ -39,11 +43,15 @@ public class Polygon {
   }
 
   public Line[] eachLine() {
-    Line[] lines = new Line[points.length - 1];
-    for (int l = 0; l < lines.length; l++) {
-      lines[l] = new Line(points[l], points[l + 1]);
+    List<Line> lines = new ArrayList<>();
+    int countMaybe = points.length - 1;
+    for (int l = 0; l < countMaybe; l++) {
+      try {
+        lines.add(new Line(points[l], points[l + 1]));
+      } catch (GeometryResolutionException ignored) {
+      }
     }
-    return lines;
+    return lines.toArray(new Line[]{});
   }
 
   public Object[][] getFillPolygon(int xSize, int ySize) {
@@ -71,12 +79,12 @@ public class Polygon {
     }
     // fill the lines
     for (Line line : lines) {
-    int[][] pathXY = line.getPathXY();
-    for (int[] xy : pathXY) {
-      if (xy[1] >= ySize || xy[1] < 0) continue;
-      if (xy[0] >= xSize || xy[0] < 0) continue;
-      grid[xy[1]][xy[0]] = 1;
-    }
+      int[][] pathXY = line.getPathXY();
+      for (int[] xy : pathXY) {
+        if (xy[1] >= ySize || xy[1] < 0) continue;
+        if (xy[0] >= xSize || xy[0] < 0) continue;
+        grid[xy[1]][xy[0]] = 1;
+      }
     }
     return grid;
   }
@@ -88,9 +96,7 @@ public class Polygon {
     int offsetY = offsets[1];
     Line.LineDirection direction = line.getLineDirection();
     switch (direction) {
-      case North, NorthEast, NorthWest -> {
-        isUpCurrent = true;
-      }
+      case North, NorthEast, NorthWest -> isUpCurrent = true;
     }
     // only handle y between line's y1 and y2
     for (int yInLine : eachY) {

@@ -1,5 +1,7 @@
 package org.xyf.gis.base;
 
+import org.xyf.gis.GeometryResolutionException;
+
 public class Line {
 
   private final int x1;
@@ -7,17 +9,20 @@ public class Line {
   private final int x2;
   private final int y2;
 
-  public Line(Point p1, Point p2) {
+  public Line(Point p1, Point p2) throws GeometryResolutionException {
     this(p1.getX(), p1.getY(), p2.getX(), p2.getY());
   }
 
-  public Line(int x1, int y1, int x2, int y2) {
+  public Line(int x1, int y1, int x2, int y2) throws GeometryResolutionException {
     this.x1 = x1;
     this.y1 = y1;
     this.x2 = x2;
     this.y2 = y2;
+    /*
+     * Resolution exception here. It may occur that you specify a low resolution grid or matrix.
+     */
     if (getRowDiff() == 0 && getColDiff() == 0) {
-      throw new RuntimeException("The same point at this line.");
+      throw new GeometryResolutionException("The same point at this line.");
     }
   }
 
@@ -83,7 +88,7 @@ public class Line {
       result = new int[eachY.length][2];
       int i = 0;
       for (int y : eachY) {
-        result[i] = new int[]{x1, y};
+        result[i] = new int[] {x1, y};
         i++;
       }
       return result;
@@ -93,7 +98,7 @@ public class Line {
       result = new int[eachX.length][2];
       int i = 0;
       for (int x : eachX) {
-        result[i] = new int[]{x, y1};
+        result[i] = new int[] {x, y1};
         i++;
       }
       return result;
@@ -104,7 +109,7 @@ public class Line {
       int i = 0;
       for (int x : eachX) {
         int yA = getTargetY(x);
-        result[i] = new int[]{x, yA};
+        result[i] = new int[] {x, yA};
         i++;
       }
     } else {
@@ -113,7 +118,7 @@ public class Line {
       int i = 0;
       for (int y : eachY) {
         int xA = getTargetX(y);
-        result[i] = new int[]{xA, y};
+        result[i] = new int[] {xA, y};
         i++;
       }
     }
@@ -130,10 +135,15 @@ public class Line {
     return Math.round((float) (y2 - y1) * (x - x1) / (x2 - x1) + y1);
   }
 
-  /**
-   * Line direction of 2 points below. (x1,y1)->(x2,y2) There are 8 Directions from centre
-   */
+  /** Line direction of 2 points below. (x1,y1)->(x2,y2) There are 8 Directions from centre */
   public enum LineDirection {
-    North, NorthEast, East, SouthEast, South, SouthWest, West, NorthWest
+    North,
+    NorthEast,
+    East,
+    SouthEast,
+    South,
+    SouthWest,
+    West,
+    NorthWest
   }
 }

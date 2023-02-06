@@ -1,5 +1,6 @@
 package org.xyf.gis.utils;
 
+import org.xyf.gis.GeometryResolutionException;
 import org.xyf.gis.base.Line;
 import org.xyf.gis.base.Point;
 import org.xyf.gis.base.Polygon;
@@ -12,7 +13,10 @@ public class RasterPrinter {
     Object[][] obj;
     obj = VectorToRaster.pointToRaster(5, 5, new Point(2, 3));
     printRaster(obj, true);
-    obj = VectorToRaster.lineToRaster(10, 10, new Line(2, 3, 5, 8));
+    try {
+      obj = VectorToRaster.lineToRaster(10, 10, new Line(2, 3, 5, 8));
+    } catch (GeometryResolutionException ignored) {
+    }
     printRaster(obj, true);
     obj =
         VectorToRaster.polylineToRaster(
@@ -30,6 +34,7 @@ public class RasterPrinter {
                   new Point(0, 0),
                   new Point(6, 19),
                   new Point(5, 5),
+                    new Point(5, 5),
                   new Point(39, 29),
                   new Point(9, 3),
                   new Point(0, 0)
@@ -41,9 +46,9 @@ public class RasterPrinter {
     int rowSize = objects.length;
     int colSize = objects[0].length;
     System.out.printf("row: %s, col: %s\n", rowSize, colSize);
-    for (int row = 0; row < rowSize; row++) {
+    for (Object[] object : objects) {
       for (int col = 0; col < colSize; col++) {
-        System.out.printf("%s\t", objects[row][col]);
+        System.out.printf("%s\t", object[col]);
       }
       System.out.println();
     }
@@ -53,7 +58,20 @@ public class RasterPrinter {
     int rowSize = objects.length;
     int colSize = objects[0].length;
     System.out.printf("row: %s, col: %s\n", rowSize, colSize);
-    for (int row = 0; row < rowSize; row++) {
+    for (Object[] object : objects) {
+      for (int col = 0; col < colSize; col++) {
+        int v = (int) object[col];
+        System.out.printf("%s\t", isFormat && v == 0 ? "." : "x");
+      }
+      System.out.println();
+    }
+  }
+
+  public static void printRasterReverse(Object[][] objects, boolean isFormat) {
+    int rowSize = objects.length;
+    int colSize = objects[0].length;
+    System.out.printf("row: %s, col: %s\n", rowSize, colSize);
+    for (int row = rowSize - 1; row >= 0; row--) {
       for (int col = 0; col < colSize; col++) {
         int v = (int) objects[row][col];
         System.out.printf("%s\t", isFormat && v == 0 ? "." : "x");

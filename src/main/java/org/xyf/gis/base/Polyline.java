@@ -1,5 +1,10 @@
 package org.xyf.gis.base;
 
+import org.xyf.gis.GeometryResolutionException;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class Polyline {
 
   private final Point[] points;
@@ -13,11 +18,14 @@ public class Polyline {
   }
 
   public Line[] eachLine() {
-    Line[] lines = new Line[points.length - 1];
-    for (int l = 0; l < lines.length; l++) {
-      lines[l] = new Line(points[l], points[l + 1]);
+    List<Line> lines = new ArrayList<>();
+    int countMaybe = points.length - 1;
+    for (int l = 0; l < countMaybe; l++) {
+      try {
+        lines.add(new Line(points[l], points[l + 1]));
+      } catch (GeometryResolutionException ignored) {
+      }
     }
-    return lines;
+    return lines.toArray(new Line[]{});
   }
-
 }
