@@ -1,4 +1,4 @@
-package org.xyf.gis;
+package org.xyf.gis.exception;
 
 public class GeometryResolutionException extends Exception {
 

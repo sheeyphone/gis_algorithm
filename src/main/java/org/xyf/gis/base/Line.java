@@ -1,6 +1,6 @@
 package org.xyf.gis.base;
 
-import org.xyf.gis.GeometryResolutionException;
+import org.xyf.gis.exception.GeometryResolutionException;
 
 public class Line {
 

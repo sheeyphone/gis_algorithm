@@ -1,6 +1,6 @@
 package org.xyf.gis.base;
 
-import org.xyf.gis.GeometryResolutionException;
+import org.xyf.gis.exception.GeometryResolutionException;
 
 import java.util.ArrayList;
 import java.util.List;

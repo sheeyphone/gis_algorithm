@@ -1,6 +1,6 @@
 package org.xyf.gis.utils;
 
-import org.xyf.gis.GeometryResolutionException;
+import org.xyf.gis.exception.GeometryResolutionException;
 import org.xyf.gis.base.Line;
 import org.xyf.gis.base.Point;
 import org.xyf.gis.base.Polygon;
@@ -23,7 +23,7 @@ public class RasterPrinter {
             10,
             10,
             new Polyline(
-                new Point[] {new Point(2, 3), new Point(5, 8), new Point(8, 8), new Point(1, 1)}));
+                new Point[] {new Point(2, 3), new Point(3, 8), new Point(8, 8), new Point(1, 1)}));
     printRaster(obj, true);
     obj =
         VectorToRaster.polygonToRaster(
