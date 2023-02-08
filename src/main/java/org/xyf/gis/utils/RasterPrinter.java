@@ -1,23 +1,33 @@
 package org.xyf.gis.utils;
 
-import org.xyf.gis.exception.GeometryResolutionException;
 import org.xyf.gis.base.Line;
 import org.xyf.gis.base.Point;
 import org.xyf.gis.base.Polygon;
 import org.xyf.gis.base.Polyline;
 import org.xyf.gis.convertor.VectorToRaster;
+import org.xyf.gis.exception.GeometryResolutionException;
 
 public class RasterPrinter {
 
   public static void main(String[] args) {
     Object[][] obj;
+
+    System.out.println("POINT:");
     obj = VectorToRaster.pointToRaster(5, 5, new Point(2, 3));
     printRaster(obj, true);
+    System.out.println(RasterUtils.getAllXYByValue(obj, 1).length);
+    System.out.println();
+
+    System.out.println("LINE:");
     try {
       obj = VectorToRaster.lineToRaster(10, 10, new Line(2, 3, 5, 8));
     } catch (GeometryResolutionException ignored) {
     }
     printRaster(obj, true);
+    System.out.println(RasterUtils.getAllXYByValue(obj, 1).length);
+    System.out.println();
+
+    System.out.println("POLYLINE:");
     obj =
         VectorToRaster.polylineToRaster(
             10,
@@ -25,6 +35,10 @@ public class RasterPrinter {
             new Polyline(
                 new Point[] {new Point(2, 3), new Point(3, 8), new Point(8, 8), new Point(1, 1)}));
     printRaster(obj, true);
+    System.out.println(RasterUtils.getAllXYByValue(obj, 1).length);
+    System.out.println();
+
+    System.out.println("POLYGON:");
     obj =
         VectorToRaster.polygonToRaster(
             20,
@@ -34,12 +48,13 @@ public class RasterPrinter {
                   new Point(0, 0),
                   new Point(6, 19),
                   new Point(5, 5),
-                    new Point(5, 5),
+                  new Point(5, 5),
                   new Point(39, 29),
                   new Point(9, 3),
                   new Point(0, 0)
                 }));
     printRaster(obj, true);
+    System.out.println(RasterUtils.getAllXYByValue(obj, 1).length);
   }
 
   public static void printRaster(Object[][] objects) {

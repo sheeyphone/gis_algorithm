@@ -1,5 +1,8 @@
 package org.xyf.gis.utils;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class RasterUtils {
 
   /**
@@ -42,6 +45,26 @@ public class RasterUtils {
   }
 
   /**
+   * This is a statistics method, return all x and y in array where the grid value equals the value
+   * specify.
+   *
+   * @param grid base grid
+   * @param value finding value
+   * @return x,y in array
+   */
+  public static int[][] getAllXYByValue(Object[][] grid, Object value) {
+    List<int[]> xyList = new ArrayList<>();
+    for (int y = 0; y < grid.length; y++) {
+      for (int x = 0; x < grid[y].length; x++) {
+        if (value == grid[y][x]) {
+          xyList.add(new int[] {x, y});
+        }
+      }
+    }
+    return xyList.toArray(new int[][] {});
+  }
+
+  /**
    * Merge target matrix into source matrix. Notice that it must be the same scale of dimension and
    * grid size between the target and source.
    *
@@ -58,5 +81,4 @@ public class RasterUtils {
       }
     }
   }
-
 }
